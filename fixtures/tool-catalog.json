@@ -1,0 +1,219 @@
+[
+  {
+    "name": "remember",
+    "title": "Save context to STEM memory",
+    "description": "Save a distilled fact, preference, decision, idea or note to the authenticated user's STEM account when the user explicitly asks to remember it. Saved context persists across sessions and is available to compatible assistants connected to the same account, such as Claude and ChatGPT. Returns the new numeric memory ID, source, type and autolinked IDs. Each call creates a new memory and may create links; retries can duplicate saves. This does not read or import unsaved conversations, browse the web or access other users' data. Do not store whole transcripts or secrets.",
+    "annotations": {
+      "title": "Save context to STEM memory",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Non-empty distilled context to save for later use: a fact, preference, decision, idea, question or note. Preserve relevant attribution; exclude secrets and whole transcripts."
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "claude",
+            "chatgpt",
+            "antigravity",
+            "gemini",
+            "perplexity",
+            "muse",
+            "grok",
+            "grok-bot",
+            "cursor",
+            "codex",
+            "hermes",
+            "openclaw",
+            "other",
+            "notes",
+            "web"
+          ],
+          "description": "Origin label for the supplied context (default notes). Labels such as claude, chatgpt or web do not connect to, fetch from, or import that service."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "idea",
+            "decision",
+            "fact",
+            "preference",
+            "question",
+            "note"
+          ],
+          "description": "Category of the saved context (default note)."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional topic labels stored with this memory; these are not access permissions."
+        },
+        "autolink": {
+          "type": "boolean",
+          "description": "If true, also create relates links to up to three related memories from a pool of up to 300 saved memories in the same account (default false)."
+        }
+      },
+      "required": [
+        "text"
+      ]
+    }
+  },
+  {
+    "name": "recall",
+    "title": "Search saved STEM context",
+    "description": "Search previously saved memories in the authenticated user's STEM account. Use to recall preferences or past decisions, resume a project, or reuse context saved by another compatible assistant connected to the same account, such as Claude or ChatGPT. Returns ranked candidates with numeric IDs, text, source, type, timestamps and relevance scores; check their relevance before answering. Results may be weak matches or empty, and retrieval is bounded, not an exhaustive archive search. This read does not change memories, search the web, read unsaved chat history or access other users' data.",
+    "annotations": {
+      "title": "Search saved STEM context",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Non-empty topic, question or keywords describing saved context to retrieve; include specific project or decision terms when known."
+        },
+        "limit": {
+          "type": "number",
+          "description": "Maximum returned memories: 1–50 (default 8). Filters can yield fewer results; fallback retrieval considers up to 500 stored memories."
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "claude",
+            "chatgpt",
+            "antigravity",
+            "gemini",
+            "perplexity",
+            "muse",
+            "grok",
+            "grok-bot",
+            "cursor",
+            "codex",
+            "hermes",
+            "openclaw",
+            "other",
+            "notes",
+            "web"
+          ],
+          "description": "Optional filter by the stored origin label. Omit to search across assistant sources. A source label does not grant access to that assistant's unsaved conversations."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "idea",
+            "decision",
+            "fact",
+            "preference",
+            "question",
+            "note"
+          ],
+          "description": "Optional filter by saved memory category; omit to include all categories."
+        }
+      },
+      "required": [
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "link",
+    "title": "Connect two saved STEM memories",
+    "description": "Create a directed relationship between two existing memories in the authenticated user's STEM account: builds_on, supports, contradicts or relates. Use numeric memory IDs returned by remember or recall; both memories must belong to this account. Returns the new link ID, from, to, type and weight. Each call creates a new link; retries can duplicate links. This organizes saved context; it does not connect assistant accounts, import conversations or link to other users' memories.",
+    "annotations": {
+      "title": "Connect two saved STEM memories",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "number",
+          "description": "Numeric ID of the source memory in this account, from remember or recall. Do not pass graph display IDs such as m12, core or you."
+        },
+        "to": {
+          "type": "number",
+          "description": "Numeric ID of the target memory in this account, from remember or recall. For builds_on, the source memory builds on this target."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "builds_on",
+            "supports",
+            "contradicts",
+            "relates"
+          ],
+          "description": "Relationship from the source memory to the target memory (default relates)."
+        },
+        "weight": {
+          "type": "number",
+          "description": "Relationship strength, conventionally 0–1 (default 1); the server does not clamp this value."
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ]
+    }
+  },
+  {
+    "name": "graph",
+    "title": "Inspect the STEM memory graph",
+    "description": "Read a bounded visualization of saved memories and their relationships in the authenticated user's STEM account. Returns layers, nodes with short labels, typed edges and counts for the returned subset, not full memory text or account-wide totals. Memory display IDs are prefixed with m; core and you are synthetic visualization nodes. Use recall for full saved context and numeric memory IDs. This does not change memories, enumerate connected assistants, search the web or expose other users' data.",
+    "annotations": {
+      "title": "Inspect the STEM memory graph",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "number",
+          "description": "Maximum saved memories to include: 1–1000 (default 300), plus synthetic core/you nodes. Only links among the included memories from up to 3000 stored links are shown."
+        }
+      }
+    }
+  },
+  {
+    "name": "forget",
+    "title": "Delete a saved STEM memory",
+    "description": "Delete one saved memory and its attached links from the authenticated user's STEM account when the user requests that deletion. This is destructive and has no undo tool; identify the intended memory with recall before deleting. Returns ok and the requested numeric ID; an already absent ID is a no-op, so success does not prove it previously existed. This does not delete original conversations in Claude, ChatGPT or other assistants, erase memories in other users' accounts, or disable future saving.",
+    "annotations": {
+      "title": "Delete a saved STEM memory",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Numeric ID of the specific STEM memory the user wants deleted, as returned by remember or recall. Do not guess an ID or use graph display IDs."
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  }
+]

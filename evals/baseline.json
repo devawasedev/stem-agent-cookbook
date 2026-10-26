@@ -1,0 +1,42 @@
+{
+  "kind": "local-deterministic-test-baseline",
+  "recordedAt": "2026-10-26T00:27:42.239Z",
+  "status": "passed",
+  "runtimes": {
+    "node": "v22.23.1",
+    "python": "Python 3.9.6"
+  },
+  "tests": {
+    "total": 18,
+    "passed": 18,
+    "skipped": 0,
+    "failed": 0
+  },
+  "evidence": [
+    "Node synthetic save/recall/graph/delete against a disposable local fixture",
+    "Python synthetic save/recall/graph/delete against that fixture",
+    "Node and Python PKCE/DCR against an automatic synthetic OAuth fixture",
+    "Client safety and evaluation scorer arithmetic checks"
+  ],
+  "limitations": [
+    "Not a deployed STEM test",
+    "Not real provider OAuth or consent verification",
+    "No LLM calls or model performance measurement",
+    "Fixture search and graph are simplified"
+  ],
+  "modelEvaluation": null,
+  "providerOAuthVerification": null,
+  "sourceSha256": {
+    "stem-client.mjs": "51a60e940de83c70b75cb59e43d6998f864efdafefaa9e914225628c3e7523b7",
+    "oauth.mjs": "b896ec64cbfe0024c9e793d39c31fef03e6d71c9ec1d658f3b75b26cc6e0aea9",
+    "stem_client.py": "d19bb9336c60bd1c5b8759f38455f01264107963ae75441b38b8f54bb339bfdd",
+    "oauth_client.py": "72f2411c0721fd286129917de5b50437087624f37a96b64cf4723d29554144b4",
+    "fixture-server.mjs": "0f4d5e2465e7c09f20ddb72bee0f0667279bd5873da8e645c23b8beb539e57cf",
+    "fixtures/tool-catalog.json": "46d01b3fcc38b704188cb70f4af244d432258d56e7fc39fdbed23d1698a25814",
+    "evals/golden-prompts.json": "1a4461d0cfcfaccd0695d9b1318fa3035d7a903b6d298ff73bc55ae7d95bd415",
+    "evals/evaluate.mjs": "f780c6c73bd584d7bdad29fbf80f976f407ebe625cf0f7422d26539fdeb57235",
+    "test/archive.test.mjs": "a91654087491fd82cdb3db78553ea13a81d55ae0a69aefcd7a49eff648c47180",
+    "test/cookbook.test.mjs": "0a71fbe05563d9c4aacc2bf8e677941635ae975212f25e07cc4d6083d177554c",
+    "test/evaluate.test.mjs": "b193ff6eddabca16751e1faacf1bc9b99badd178f6290fadb54f654aab3493d9"
+  }
+}
