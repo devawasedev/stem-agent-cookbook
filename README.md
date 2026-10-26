@@ -100,7 +100,7 @@ python3 build_archive.py
 python3 build_archive.py --output /absolute/output/stem-agent-cookbook.zip
 ```
 
-The builder uses a fixed file allowlist, rejects symlink inputs and normalizes ZIP metadata. It includes a `SHA256SUMS` manifest and prints the ZIP SHA-256. It excludes tokens, environment files, local result recordings, Python caches, dependency folders and generated archives. Default output is `dist/stem-agent-cookbook.zip`; archive bytes are reproducible for the same source files and compression implementation. The output archive is a distribution artifact, not a credential store.
+The builder uses a fixed file allowlist, rejects symlink inputs and normalizes ZIP metadata. It includes a `SHA256SUMS` manifest and prints the ZIP SHA-256. It excludes tokens, environment files, unallowlisted local result recordings, Python caches, dependency folders and generated archives. The explicit allowlist includes one curated, sanitized live-demo receipt. Default output is `dist/stem-agent-cookbook.zip`; archive bytes are reproducible for the same source files and compression implementation. The output archive is a distribution artifact, not a credential store.
 
 ## License scope
 
