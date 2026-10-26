@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "kind": "node-to-python-shared-memory",
+  "startedAt": "2026-10-26T01:43:27.206Z",
+  "modelEvaluation": false,
+  "llmHostCompatibilityTest": false,
+  "independentlyAuthorizedClients": false,
+  "sessionBoundary": "Two MCP client sessions, one user-authorized OAuth grant",
+  "protocolVersion": "2025-06-18",
+  "runtimes": {
+    "node": "v22.23.1",
+    "python": "3.9.6"
+  },
+  "checks": {
+    "nodeInitialized": true,
+    "requiredToolsAvailable": true,
+    "syntheticSaveAcknowledged": true,
+    "pythonExactRecall": true,
+    "deleteAcknowledged": true,
+    "absentFromSubsequentBoundedRecall": true
+  },
+  "timings": {
+    "nodeInitializeMs": 1764.839,
+    "toolsListMs": 1901.989,
+    "nodeRememberMs": 2097.74,
+    "pythonProcessMs": 6141.635,
+    "pythonInitializeMs": 3676.42,
+    "pythonRecallMs": 2257.218,
+    "nodeForgetMs": 1573.671,
+    "nodeRecallAfterDeleteMs": 1094.707,
+    "workflowMs": 14574.698
+  },
+  "cleanup": {
+    "attempted": true,
+    "confirmed": true
+  },
+  "failures": [],
+  "ok": true,
+  "finishedAt": "2026-10-26T01:43:41.777Z",
+  "evidence": "live-authorized-synthetic-workflow",
+  "authorizationMs": 112456.715,
+  "sourceSha256": {
+    "shared_memory_demo.mjs": "8303111a453a896a88c6416c0fd2dc0b566bdd1af4d13455983daffeb643ec0f",
+    "shared_memory_reader.py": "03f95eea7a11ca334974e17187ac2df6b3188c777ec3aebc82daf20a069de49f",
+    "stem-client.mjs": "51a60e940de83c70b75cb59e43d6998f864efdafefaa9e914225628c3e7523b7",
+    "stem_client.py": "e4825515c0974d3791b02bdeb23544b5e820ca81923af6ee0dd725619b0f671e",
+    "oauth.mjs": "b896ec64cbfe0024c9e793d39c31fef03e6d71c9ec1d658f3b75b26cc6e0aea9"
+  },
+  "oauthRevocationAcknowledged": true,
+  "registrationMayRemain": true
+}

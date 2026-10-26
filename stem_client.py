@@ -1,5 +1,6 @@
 """Dependency-free JSON-response STEM MCP client. Python 3.9+; no credential persistence."""
 import json
+import platform
 import urllib.error
 import urllib.request
 import uuid
@@ -7,6 +8,7 @@ from urllib.parse import urlsplit
 
 RESOURCE = "https://awase.dev/stem"
 PROTOCOL_VERSION = "2025-06-18"
+USER_AGENT = "stem-agent-cookbook/1.0.0 Python/" + platform.python_version() + " (+https://awase.dev/developers)"
 
 
 def endpoint(value, allow_local=False):
@@ -26,7 +28,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 def request(url, data=None, headers=None, timeout=15):
     """Redirects disabled so bearer credentials cannot follow a redirect to another origin."""
     try:
-        req = urllib.request.Request(url, data=data, headers=headers or {})
+        # Identify this actual product; never impersonate a browser or search crawler.
+        req = urllib.request.Request(url, data=data, headers={"User-Agent": USER_AGENT, **(headers or {})})
         with urllib.request.build_opener(NoRedirect()).open(req, timeout=timeout) as response:
             body = response.read(1_048_577)
             if len(body) > 1_048_576:

@@ -7,9 +7,10 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parent
 FILES = (
-    ".gitignore", "README.md", "package.json", "stem-client.mjs", "oauth.mjs", "smoke.mjs",
+    ".gitignore", "README.md", "LICENSE", "package.json", "stem-client.mjs", "oauth.mjs", "smoke.mjs",
     "stem_client.py", "oauth_client.py", "smoke.py", "fixture-server.mjs",
-    "fixtures/tool-catalog.json", "evals/golden-prompts.json", "evals/evaluate.mjs",
+    "shared_memory_demo.mjs", "shared_memory_reader.py", "DEMO.md", "test/shared-memory.test.mjs",
+    "fixtures/tool-catalog.json", "evals/golden-prompts.json", "evals/evaluate.mjs", "evals/live-shared-memory-20261025.json",
     "evals/README.md", "evals/baseline.json", "recipes/README.md", "recipes/fastmcp_recall.py",
     "test/cookbook.test.mjs", "test/evaluate.test.mjs", "test/archive.test.mjs",
     "build_archive.py", "record_baseline.mjs",

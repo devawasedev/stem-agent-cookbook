@@ -31,6 +31,18 @@ Each example saves one uniquely marked synthetic note, recalls that exact note, 
 
 The fixture approximates the public wire shapes; its exact-substring search, simple graph and automatic OAuth grant are **not** STEM production retrieval, authentication, account isolation, consent enforcement, TLS or provider compatibility tests. All data is synthetic. Do not expose this fixture to a network or use it as a backend.
 
+## Reproduce a Node-to-Python shared-memory demo
+
+[`DEMO.md`](./DEMO.md) walks through one Node save followed by an exact recall from a fresh Python MCP session, with exact-ID cleanup and a sanitized timing receipt. Both clients use one user-authorized OAuth grant. This demonstrates two language clients sharing saved context, not two independently authorized LLM hosts.
+
+```sh
+node shared_memory_demo.mjs --fixture http://127.0.0.1:PORT/stem
+# Only after choosing a dedicated synthetic account:
+node shared_memory_demo.mjs --live-synthetic --receipt /absolute/path/to/new-receipt.json
+```
+
+The child receives credentials over stdin rather than command arguments, files or environment variables. Receipt fields distinguish local fixtures, live attempts, confirmed retrieval and cleanup. The [October 25 live result](./DEMO.md#observed-live-result--october-25-2026) includes a sanitized receipt with actual timings and exact-source hashes; it is a developer-client run, not an LLM-host test or screen recording.
+
 ## Explicit live synthetic smoke
 
 Only run this when you intend to authorize a real test connection. Prefer a dedicated STEM account containing synthetic data. These commands create an OAuth client registration, ask you to sign in in your browser, save one synthetic memory to that account, remove that exact memory, and attempt token revocation:
@@ -50,6 +62,8 @@ Failures are not silently retried: `remember` and `link` can duplicate writes. I
 `oauth.mjs` and `oauth_client.py` discover STEM's protected-resource metadata at `/.well-known/oauth-protected-resource/stem`, verify the exact resource, and pin the authorization server and its endpoints to the resource's origin. They require public-client authentication and S256 PKCE, register a loopback callback using DCR, generate fresh state/verifier values, validate state (and issuer when returned), and exchange the one-use code with the same redirect URI and `resource=https://awase.dev/stem`. The client rejects unexpected granted scopes. TLS validation remains enabled; redirects are refused for metadata/token/MCP requests so credentials cannot follow another origin.
 
 This is a deliberately STEM-specific tutorial, not a generic discovery library. It uses the supported legacy `2025-06-18` JSON-response Streamable HTTP subset and does not implement SSE subscriptions, refresh rotation, pagination, the `2026-07-28` request model, CIMD, or every OAuth provider. It rejects an unsupported negotiated protocol rather than pretending to support it. A server's `structuredContent` is used when present, with JSON text fallback. For a full application use a maintained MCP SDK, preserve per-user token boundaries, and test your host/version. DCR remains a backward-compatibility mechanism in the [current MCP authorization specification](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization); a production client should use CIMD when both sides support it. [Legacy authorization requirements](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization) explain the PKCE, discovery and resource parameters used here.
+
+Python requests identify the actual cookbook and Python runtime with a `stem-agent-cookbook/1.0.0 Python/...` User-Agent. They do not impersonate a browser or search crawler. A blocked or challenged request still fails; the client does not disable TLS, rotate identities, solve challenges or change server protections.
 
 ## Actual core tools
 
@@ -87,3 +101,7 @@ python3 build_archive.py --output /absolute/output/stem-agent-cookbook.zip
 ```
 
 The builder uses a fixed file allowlist, rejects symlink inputs and normalizes ZIP metadata. It includes a `SHA256SUMS` manifest and prints the ZIP SHA-256. It excludes tokens, environment files, local result recordings, Python caches, dependency folders and generated archives. Default output is `dist/stem-agent-cookbook.zip`; archive bytes are reproducible for the same source files and compression implementation. The output archive is a distribution artifact, not a credential store.
+
+## License scope
+
+The example code and documentation in this cookbook are available under the [MIT License](./LICENSE), copyright 2026 Awase LLC. This license applies only to the cookbook directory and its distributed copies. It does not license STEM's backend, account data, hosted service, branding or other repository directories. Service access remains subject to its published terms and each user's authorization.

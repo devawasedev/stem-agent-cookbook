@@ -49,6 +49,23 @@ test('Python synthetic workflow is runnable using the standard library', async (
   } finally { await fixture.close(); }
 });
 
+test('Python requests identify the real cookbook and runtime without browser or crawler impersonation', async () => {
+  const headers = [];
+  const server = createServer((req, res) => { headers.push(req.headers); res.writeHead(200, { 'content-type': 'application/json' }); res.end('{}'); });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  try {
+    const url = `http://127.0.0.1:${server.address().port}/metadata`;
+    const script = 'import sys\nfrom stem_client import request\nrequest(sys.argv[1])\nrequest(sys.argv[1],data=b"{}",headers={"Content-Type":"application/json"})';
+    const result = await execute('python3', ['-B', '-c', script, url], { cwd });
+    assert.equal(result.stdout, ''); assert.equal(result.stderr, ''); assert.equal(headers.length, 2);
+    for (const header of headers) {
+      assert.match(header['user-agent'], /^stem-agent-cookbook\/1\.0\.0 Python\/3\.\d+\.\d+ \(\+https:\/\/awase\.dev\/developers\)$/);
+      assert.doesNotMatch(header['user-agent'], /Mozilla|Chrome|Safari|Googlebot|GPTBot/i);
+      assert.equal(header.authorization, undefined);
+    }
+  } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
 test('Python OAuth fixture exercises PKCE/DCR without recording tokens', async () => {
   const fixture = await startFixture();
   const script = 'import sys,json,urllib.request\nfrom oauth_client import authorize\nfrom stem_client import StemClient,synthetic_workflow\ngrant=authorize(sys.argv[1],allow_local=True,on_authorization_url=lambda url: urllib.request.urlopen(url).close())\nclient=StemClient(sys.argv[1],grant.access_token,allow_local=True)\nresult=synthetic_workflow(client)\nclient.forget_token()\nresult["revoked"]=grant.revoke()\nprint(json.dumps(result))';
