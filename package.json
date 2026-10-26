@@ -2,6 +2,7 @@
   "name": "stem-agent-cookbook",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "description": "Dependency-free STEM MCP examples and honest evaluation fixtures",
   "engines": { "node": ">=22" },
@@ -9,6 +10,7 @@
     "test": "node --test test/*.test.mjs",
     "fixture": "node fixture-server.mjs",
     "smoke": "node smoke.mjs",
+    "demo": "node shared_memory_demo.mjs",
     "eval": "node evals/evaluate.mjs",
     "pack": "python3 build_archive.py"
   }
