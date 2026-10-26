@@ -1,8 +1,16 @@
-# STEM agent cookbook
+# STEM agent cookbook — Stem by Awase
+
+Persistent AI memory across ChatGPT, Claude and Cursor: save selected context, then recall it through an authorized connection to the same STEM account. See the [agent hub](https://awase.dev/agents) for supported hosts and connection guides.
 
 Connect to `https://awase.dev/stem`, save a selected piece of context and retrieve it from another compatible assistant connected to the same STEM account. This directory is a standalone, dependency-free starting point for Node.js and Python clients. It contains no account credentials or production memories.
 
 Public entry: [STEM developers](https://awase.dev/developers). Connection guide: [STEM cookbook](https://awase.dev/developers/cookbook). Product capability reference: [STEM for agents](https://awase.dev/agents).
+
+## Dated evidence: selected-context handoff
+
+On **October 25, 2026**, an isolated synthetic test used ChatGPT web, Claude web and Cursor Agents. ChatGPT reported saving a note; expanded native Claude and Cursor recall responses returned its same reported memory ID and exact text. ChatGPT's save and deletion payloads were not independently captured. Cleanup was assistant-reported deletion plus zero results in one bounded Claude recall, not an account-wide erasure audit.
+
+Cursor used **User MCP**, This Mac, with no repository. This establishes one observed recall through that configuration; it does not verify saving in Cursor, the Cursor plugin's runtime, every host/version, full-chat import or ongoing transcript synchronization. Read the [dated native demonstration and limitations](https://awase.dev/workflows/chatgpt-to-claude#observed-native-run) and [compatibility evidence](https://awase.dev/docs/compatibility).
 
 ## Run locally first
 
@@ -64,6 +72,10 @@ Failures are not silently retried: `remember` and `link` can duplicate writes. I
 This is a deliberately STEM-specific tutorial, not a generic discovery library. It uses the supported legacy `2025-06-18` JSON-response Streamable HTTP subset and does not implement SSE subscriptions, refresh rotation, pagination, the `2026-07-28` request model, CIMD, or every OAuth provider. It rejects an unsupported negotiated protocol rather than pretending to support it. A server's `structuredContent` is used when present, with JSON text fallback. For a full application use a maintained MCP SDK, preserve per-user token boundaries, and test your host/version. DCR remains a backward-compatibility mechanism in the [current MCP authorization specification](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization); a production client should use CIMD when both sides support it. [Legacy authorization requirements](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization) explain the PKCE, discovery and resource parameters used here.
 
 Python requests identify the actual cookbook and Python runtime with a `stem-agent-cookbook/1.0.0 Python/...` User-Agent. They do not impersonate a browser or search crawler. A blocked or challenged request still fails; the client does not disable TLS, rotate identities, solve challenges or change server protections.
+
+## Reuse project context with a skill
+
+For an assistant that supports user-installed skills, review the portable [STEM project-context skill](https://awase.dev/downloads/stem-project-context.zip). It recalls relevant decisions before work and saves only selected, approved context. Installing instructions does not connect an account or grant tool access; use the [host setup guides](https://awase.dev/agents#integrations) and review your host’s installation flow. The [Cursor plugin source](https://github.com/devawasedev/stem-cursor-connector) packages its Cursor-specific version. Neither version imports full conversations or enables automatic saving.
 
 ## Actual core tools
 
